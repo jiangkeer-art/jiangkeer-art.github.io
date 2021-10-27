@@ -612,7 +612,7 @@ $(function() {
 					  repo: comment.data('r'),
 					  owner: comment.data('o'),
 					  admin: comment.data('a'),
-					  id: decodeURI(window.location.pathname),
+					  id: 2021/20/26/hello-world,
 					  distractionFreeMode: comment.data('d')
 					})
 					$(".comment").removeClass("link")

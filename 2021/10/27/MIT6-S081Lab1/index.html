@@ -28,10 +28,9 @@
 <meta property="og:description" content="MIT6.S081 Lab1实验代码Sleep(Easy)第一个实验的要求是实现sleep函数，函数放在user目录下。查看提示中说的程序例如echo.c，可以看到主函数有两个参数，分别为int型的argc和char*型的argv，这两个参数的作用是传递用户从命令行中输入的指令，argc为单词的个数，argv则是存储输入的命令。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://r1mptlkw9.hd-bkt.clouddn.com/MITLab1-sleep.png">
-<meta property="og:image" content="http://r1mptlkw9.hd-bkt.clouddn.com/pingpong.png">
 <meta property="og:image" content="http://r1mptlkw9.hd-bkt.clouddn.com/find.png">
 <meta property="article:published_time" content="2021-10-27T08:47:00.000Z">
-<meta property="article:modified_time" content="2021-10-27T14:51:58.776Z">
+<meta property="article:modified_time" content="2021-10-28T08:31:57.546Z">
 <meta property="article:author" content="jiangkeer">
 <meta property="article:tag" content="MIT">
 <meta property="article:tag" content="操作系统">
@@ -217,10 +216,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-10-27 16:47:00 / 修改时间：22:51:58" itemprop="dateCreated datePublished" datetime="2021-10-27T16:47:00+08:00">2021-10-27</time>
+              <time title="创建时间：2021-10-27 16:47:00" itemprop="dateCreated datePublished" datetime="2021-10-27T16:47:00+08:00">2021-10-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-28 16:31:57" itemprop="dateModified" datetime="2021-10-28T16:31:57+08:00">2021-10-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -282,7 +287,6 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./grade-lab-util pingpong</span><br></pre></td></tr></table></figure>
 
 <p>同样的，输入这段指令检查代码有没有问题。</p>
-<p><img src="http://r1mptlkw9.hd-bkt.clouddn.com/pingpong.png" alt="avator"></p>
 <h2 id="Primes-Moderate"><a href="#Primes-Moderate" class="headerlink" title="Primes(Moderate)"></a>Primes(Moderate)</h2><p>下面是利用管道来筛选素数，实验上说的算法简单来讲就是子进程读取父进程传来的数据，然后和自己的数字进行比较，如果能整除就说明不是素数，如果不能被整除就将他传递给子进程的子进程进行判断。</p>
 <p>还有一点就是，子进程收到的第一个数字一定是一个素数，因为如果某个子进程是第一次收到数字的话，就证明这个数字通过了之前进程的验证，所以他一定是一个素数。</p>
 <p>在当前进程收到第一个数字之后，就会把这个数字当成是自己的数字，然后接着接收别的进程发来的数字，并和自己的数字进行比较，如果不能被整除，就发送到下一个进程。</p>

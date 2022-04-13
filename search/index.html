@@ -78,7 +78,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container use-motion" id="rainBox">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -428,5 +428,31 @@
 
 </body>
 </html>
+<script>
+  const box=document.getElementById('rainBox');
+  let boxHeight=box.clientHeight;
+  let boxWidth=box.clientWidth;
+  window.onresize=function(){
+      boxHeight=box.clientHeight;
+      boxWidth=box.clientWidth;
+  }
+  setInterval(()=>{
+    const rain=document.createElement('div');
+    rain.classList.add('rain');
+    rain.style.top=0;
+    rain.style.left=Math.random()*boxWidth+'px';
+    rain.style.opacity=Math.random();
+    box.appendChild(rain);
+    let race=1;
+    const timer=setInterval(()=>{
+      if(parseInt(rain.style.top)>boxHeight){
+        clearInterval(timer);
+        box.removeChild(rain);
+      }
+      race++;
+      rain.style.top=parseInt(rain.style.top)+race+'px';
+    },20)
+  },50)
+</script>
 <!-- 引入jQuery -->
 <script type="text/javascript" src="//libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>

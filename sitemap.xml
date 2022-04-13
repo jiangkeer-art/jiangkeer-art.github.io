@@ -95,20 +95,6 @@
   </url>
   
   <url>
-    <loc>https://jiangkeer-art.github.io/tags/test/</loc>
-    <lastmod>2022-04-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/tags/test2/</loc>
-    <lastmod>2022-04-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jiangkeer-art.github.io/tags/Hexo/</loc>
     <lastmod>2022-04-13</lastmod>
     <changefreq>daily</changefreq>
@@ -117,6 +103,20 @@
   
   <url>
     <loc>https://jiangkeer-art.github.io/tags/hello-world/</loc>
+    <lastmod>2022-04-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jiangkeer-art.github.io/tags/test/</loc>
+    <lastmod>2022-04-13</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://jiangkeer-art.github.io/tags/test2/</loc>
     <lastmod>2022-04-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -146,14 +146,14 @@
   </url>
   
   <url>
-    <loc>https://jiangkeer-art.github.io/categories/test/</loc>
+    <loc>https://jiangkeer-art.github.io/categories/Hexo/</loc>
     <lastmod>2022-04-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://jiangkeer-art.github.io/categories/Hexo/</loc>
+    <loc>https://jiangkeer-art.github.io/categories/test/</loc>
     <lastmod>2022-04-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

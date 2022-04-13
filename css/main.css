@@ -1193,7 +1193,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #fff;
+  background: #9d6b60;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2651,4 +2651,15 @@ ul.breadcrumb li + li:last-child {
   .comments {
     padding: 10px 12px;
   }
+}
+body {
+  background: url("../images/backssss.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  background-size: cover;
+  color: var(--text-color);
+  font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 1em;
+  line-height: 2;
 }

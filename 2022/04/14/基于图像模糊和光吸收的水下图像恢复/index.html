@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/jiangkeer-art.github.io/img/fluid.png">
+  <link rel="icon" href="/jiangkeer-art.github.io/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="jiangkeer">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="基于图像模糊和光吸收的水下图像恢复最近研究了一些关于水下图像去雾恢复的东西，虽然没有写出来什么，但是读到了一些论文，这里写一下论文的研究过程以及原理之类的，论文是Underwater Image Restoration Based on Image Blurriness and Light Absorption，在IEEE上找的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于图像模糊和光吸收的水下图像恢复">
+<meta property="og:url" content="https://jiangkeer-art.github.io/2022/04/14/%E5%9F%BA%E4%BA%8E%E5%9B%BE%E5%83%8F%E6%A8%A1%E7%B3%8A%E5%92%8C%E5%85%89%E5%90%B8%E6%94%B6%E7%9A%84%E6%B0%B4%E4%B8%8B%E5%9B%BE%E5%83%8F%E6%81%A2%E5%A4%8D/index.html">
+<meta property="og:site_name" content="jiangkeer">
+<meta property="og:description" content="基于图像模糊和光吸收的水下图像恢复最近研究了一些关于水下图像去雾恢复的东西，虽然没有写出来什么，但是读到了一些论文，这里写一下论文的研究过程以及原理之类的，论文是Underwater Image Restoration Based on Image Blurriness and Light Absorption，在IEEE上找的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/image_0_2_0.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX411.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX412.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/INNERLATEXT411.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX414.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/linetable_5_1_0.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX520.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX521.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX522.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX523.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX210.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX524.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX128.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX620.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX621.jpg">
+<meta property="og:image" content="http://cnd.jiangkeer.icu/PARAGRAPHLATEX622.jpg">
+<meta property="article:published_time" content="2022-04-14T01:05:15.000Z">
+<meta property="article:modified_time" content="2022-04-14T02:34:56.384Z">
+<meta property="article:author" content="jiangkeer">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="图像增强">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://cnd.jiangkeer.icu/image_0_2_0.jpg">
+  
+  
+  <title>基于图像模糊和光吸收的水下图像恢复 - jiangkeer</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/jiangkeer-art.github.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/jiangkeer-art.github.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/jiangkeer-art.github.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"jiangkeer-art.github.io","root":"/jiangkeer-art.github.io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/jiangkeer-art.github.io/local-search.xml"};
+  </script>
+  <script  src="/jiangkeer-art.github.io/js/utils.js" ></script>
+  <script  src="/jiangkeer-art.github.io/js/color-schema.js" ></script>
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/jiangkeer-art.github.io/">
+      <strong>Jiangkeer</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jiangkeer-art.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jiangkeer-art.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jiangkeer-art.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jiangkeer-art.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/jiangkeer-art.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/jiangkeer-art.github.io/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于图像模糊和光吸收的水下图像恢复"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-04-14 09:05" pubdate>
+          2022年4月14日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">基于图像模糊和光吸收的水下图像恢复</h1>
+            
+            <div class="markdown-body">
+              
+              <h1 id="基于图像模糊和光吸收的水下图像恢复"><a href="#基于图像模糊和光吸收的水下图像恢复" class="headerlink" title="基于图像模糊和光吸收的水下图像恢复"></a>基于图像模糊和光吸收的水下图像恢复</h1><p>最近研究了一些关于水下图像去雾恢复的东西，虽然没有写出来什么，但是读到了一些论文，这里写一下论文的研究过程以及原理之类的，论文是Underwater Image Restoration Based on Image Blurriness and Light Absorption，在IEEE上找的。</p>
+<span id="more"></span>
+<h2 id="首先是原理解释"><a href="#首先是原理解释" class="headerlink" title="首先是原理解释"></a>首先是原理解释</h2><p><img src="http://cnd.jiangkeer.icu/image_0_2_0.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload></p>
+<p>上图中a表述了简化的水下场景成像的模型(IFM)，其中的I(X)指的是在像素x处观察到的强度，由透射图TM t(x)与背景光(BL) B混合场景辐射J(x)组成。TM描述了未散射或被吸收并且到达相机的场景辐射。下面的五张图片显示了具有不同背景光(BL)的五个水下图像。</p>
+<h2 id="具体实现流程"><a href="#具体实现流程" class="headerlink" title="具体实现流程"></a>具体实现流程</h2><p>首先从水下图像中的模糊区域中选择BL，然后基于BL获得深度图和TM用来恢复场景辐射。</p>
+<h3 id="图像模糊估计"><a href="#图像模糊估计" class="headerlink" title="图像模糊估计"></a>图像模糊估计</h3><p>模糊估计共有三个步骤，首先是进行初始模糊图Pinit的计算，公式在下面：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX411.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>其中Ig是输入图像Ic的灰度版本，ri=2i<em>n+1，并且n为4，接下来使用最大滤波器来计算粗糙模糊度图Pr：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX412.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>其中<img src="http://cnd.jiangkeer.icu/INNERLATEXT411.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload>是以x为中心的z</em>z局部补丁，设置z为7，随后使用soft matting来平滑生成一个模糊图像Pblr：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX414.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>其中Cr是填充孔的形态重建算子，Fg是soft matting。</p>
+<h3 id="背景光估计"><a href="#背景光估计" class="headerlink" title="背景光估计"></a>背景光估计</h3><p>有了图像模糊之后就是背景光估计(BL)，BL确定水下图像的色调以及其恢复的场景辐射。下面是基于图像模糊和方差来估计BL的算法：<br><img src="http://cnd.jiangkeer.icu/linetable_5_1_0.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>其从输入图像中的前0.1％模糊像素，最低方差区域和最大模糊区域中选取三个BL候选。使用四叉树分解来确定这两个区域（可以相同或不同），根据方差或模糊度将输入图像迭代地划分为四个相等大小的块。通过对模糊图中的对应区域中的Pblr（x）求平均来获得输入图像中的区域的模糊性。确定了三个BL候选者后，我们根据输入图像分别为每个颜色通道选择BL。</p>
+<h3 id="基于光吸收和图像模糊的深度估计"><a href="#基于光吸收和图像模糊的深度估计" class="headerlink" title="基于光吸收和图像模糊的深度估计"></a>基于光吸收和图像模糊的深度估计</h3><p>这里使用了三种深度估计的方法进行估计场景深度，随后将三种方法进行组合，得到最后的场景深度。</p>
+<h4 id="首先是第一的方法，直接通过红色通道图获得第一次深度估计"><a href="#首先是第一的方法，直接通过红色通道图获得第一次深度估计" class="headerlink" title="首先是第一的方法，直接通过红色通道图获得第一次深度估计"></a>首先是第一的方法，直接通过红色通道图获得第一次深度估计</h4><p>下面是红色通道图R的定义：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX520.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>随后进行深度估计：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX521.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>其中Fs是拉伸函数：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX522.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>V是向量。</p>
+<h4 id="随后是第二次深度估计"><a href="#随后是第二次深度估计" class="headerlink" title="随后是第二次深度估计"></a>随后是第二次深度估计</h4><p><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX523.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>使用Eq和Fs与Dmip进行估计，下面是Dmip的计算方法。<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX210.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload></p>
+<h4 id="第三次深度估计"><a href="#第三次深度估计" class="headerlink" title="第三次深度估计"></a>第三次深度估计</h4><p>使用方程式中的图像模糊度Pr进行深度估计。<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX524.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload></p>
+<h3 id="TM估计和场景辐射恢复"><a href="#TM估计和场景辐射恢复" class="headerlink" title="TM估计和场景辐射恢复"></a>TM估计和场景辐射恢复</h3><p>首先是根据公式计算TM：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX128.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>它使用从摄像机到场景点的深度，为了测量从摄像机到每个场景点的距离，还必须估计最近的场景点和摄像机之间的距离d0：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX620.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>结合Eq，最终场景深度为：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX621.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload><br>其中D是用于将相对距离转换为实际距离的缩放常数。<br>使用~df，我们可以将红色通道的TM计算为：<br><img src="http://cnd.jiangkeer.icu/PARAGRAPHLATEX622.jpg" srcset="/jiangkeer-art.github.io/img/loading.gif" lazyload></p>
+
+              
+            </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/jiangkeer-art.github.io/categories/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/" class="category-chain-item">图像增强</a>
+  
+  
+    <span>></span>
+    
+  <a href="/jiangkeer-art.github.io/categories/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/python/" class="category-chain-item">python</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/jiangkeer-art.github.io/tags/python/">#python</a>
+      
+        <a href="/jiangkeer-art.github.io/tags/%E5%9B%BE%E5%83%8F%E5%A2%9E%E5%BC%BA/">#图像增强</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于图像模糊和光吸收的水下图像恢复</div>
+      <div>https://jiangkeer-art.github.io/2022/04/14/基于图像模糊和光吸收的水下图像恢复/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>jiangkeer</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年4月14日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/jiangkeer-art.github.io/2022/04/13/hello-world/" title="Hello World">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/jiangkeer-art.github.io/js/events.js" ></script>
+<script  src="/jiangkeer-art.github.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+  
+    <script  src="/jiangkeer-art.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.0/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script>
+  (function() {
+    var enableLang = CONFIG.code_language.enable && CONFIG.code_language.default;
+    var enableCopy = CONFIG.copy_btn;
+    if (!enableLang && !enableCopy) {
+      return;
+    }
+
+    function getBgClass(ele) {
+      return Fluid.utils.getBackgroundLightness(ele) >= 0 ? 'code-widget-light' : 'code-widget-dark';
+    }
+
+    var copyTmpl = '';
+    copyTmpl += '<div class="code-widget">';
+    copyTmpl += 'LANG';
+    copyTmpl += '</div>';
+    jQuery('.markdown-body pre').each(function() {
+      var $pre = jQuery(this);
+      if ($pre.find('code.mermaid').length > 0) {
+        return;
+      }
+      if ($pre.find('span.line').length > 0) {
+        return;
+      }
+
+      var lang = '';
+
+      if (enableLang) {
+        lang = CONFIG.code_language.default;
+        if ($pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2 && $pre.children().hasClass('hljs')) {
+          lang = $pre[0].children[0].classList[1];
+        } else if ($pre[0].getAttribute('data-language')) {
+          lang = $pre[0].getAttribute('data-language');
+        } else if ($pre.parent().hasClass('sourceCode') && $pre[0].children.length > 0 && $pre[0].children[0].classList.length >= 2) {
+          lang = $pre[0].children[0].classList[1];
+          $pre.parent().addClass('code-wrapper');
+        } else if ($pre.parent().hasClass('markdown-body') && $pre[0].classList.length === 0) {
+          $pre.wrap('<div class="code-wrapper"></div>');
+        }
+        lang = lang.toUpperCase().replace('NONE', CONFIG.code_language.default);
+      }
+      $pre.append(copyTmpl.replace('LANG', lang).replace('code-widget">',
+        getBgClass($pre[0]) + (enableCopy ? ' code-widget copy-btn" data-clipboard-snippet><i class="iconfont icon-copy"></i>' : ' code-widget">')));
+
+      if (enableCopy) {
+        Fluid.utils.createScript('https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js', function() {
+          var clipboard = new window.ClipboardJS('.copy-btn', {
+            target: function(trigger) {
+              var nodes = trigger.parentNode.childNodes;
+              for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].tagName === 'CODE') {
+                  return nodes[i];
+                }
+              }
+            }
+          });
+          clipboard.on('success', function(e) {
+            e.clearSelection();
+            e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-copy', 'icon-success');
+            setTimeout(function() {
+              e.trigger.innerHTML = e.trigger.innerHTML.replace('icon-success', 'icon-copy');
+            }, 2000);
+          });
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/jiangkeer-art.github.io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/jiangkeer-art.github.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

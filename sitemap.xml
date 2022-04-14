@@ -30,13 +30,6 @@
   </url>
   
   <url>
-    <loc>https://jiangkeer-art.github.io/2022/04/13/hello-world/</loc>
-    
-    <lastmod>2022-01-05</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://jiangkeer-art.github.io/2021/11/06/%E5%B0%8F%E8%AF%B4/</loc>
     
     <lastmod>2022-01-03</lastmod>
@@ -47,13 +40,6 @@
     <loc>https://jiangkeer-art.github.io/2021/10/27/MIT6-S081Lab1/</loc>
     
     <lastmod>2021-10-30</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/2021/10/27/testpost/</loc>
-    
-    <lastmod>2021-10-27</lastmod>
     
   </url>
   
@@ -109,34 +95,6 @@
   </url>
   
   <url>
-    <loc>https://jiangkeer-art.github.io/tags/test/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/tags/test2/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/tags/Hexo/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/tags/hello-world/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jiangkeer-art.github.io/tags/%E5%B0%8F%E8%AF%B4/</loc>
     <lastmod>2022-04-14</lastmod>
     <changefreq>daily</changefreq>
@@ -174,28 +132,7 @@
   </url>
   
   <url>
-    <loc>https://jiangkeer-art.github.io/categories/test/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/categories/Hexo/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://jiangkeer-art.github.io/categories/%E5%B0%8F%E8%AF%B4/</loc>
-    <lastmod>2022-04-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://jiangkeer-art.github.io/categories/Hexo/%E4%BD%9C%E4%B8%BA%E6%97%A5%E8%AE%B0%E5%8A%A0%E5%AF%86/</loc>
     <lastmod>2022-04-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
